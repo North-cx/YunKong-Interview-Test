@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
-public class PathFinding : MonoBehaviour
+public class EnemyFinding : MonoBehaviour
 {
     public Camera mainCamera;
     public LayerMask clickMask;
@@ -12,43 +12,65 @@ public class PathFinding : MonoBehaviour
     private Vector3 currentTarget;
     public bool isMoving;
 
+    public float attackRange = 1f;  // ¹¥»÷·¶Î§
+    public float attackInterval = 1f;  // ¹¥»÷¼ä¸ô
+    private float lastAttackTime;
+
+    private Animator animator;
+
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         currentTarget = transform.position;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Time.time - lastAttackTime > attackInterval)
         {
-            Vector3 mousePosition = Input.mousePosition;
-
-            Ray ray = mainCamera.ScreenPointToRay(mousePosition);
-
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, clickMask))
-            {
-                Vector3 worldPosition = hit.point;
-
-                FindPath(transform.position, worldPosition);
-
-                Debug.Log("Êó±êµã»÷µÄÎ»ÖÃ: " + worldPosition);
-                if (grid.path.Count > 0)
-                {
-                    if (pathPoints != null)
-                    {
-                        pathPoints.Clear();
-                    }
-                    foreach (Node n in grid.path)
-                    {
-                        pathPoints.Enqueue(n.worldposition);
-                    }
-                }
-            }
+            FindEnemy();
         }
 
         MoveAlongPath();
 
+        if (isMoving)
+        {
+            animator.SetBool("isMoving", true);
+        }
+        else
+        {
+            animator.SetBool("isMoving", false);
+        }
+    }
+
+    void FindEnemy()
+    {
+        EnemyController[] enemies = FindObjectsOfType<EnemyController>();
+        foreach (var enemy in enemies)
+        {
+            FindPath(transform.position, enemy.transform.position);
+
+            if (grid.path.Count > 0)
+            {
+                if (pathPoints != null)
+                {
+                    pathPoints.Clear();
+                }
+                foreach (Node n in grid.path)
+                {
+                    pathPoints.Enqueue(n.worldposition);
+                }
+            }
+
+            if (Vector3.Distance(transform.position, enemy.transform.position) <= attackRange)
+            {
+                enemy.OnAttack();
+                animator.SetBool("isMoving", false);
+                animator.SetTrigger("attack");
+                lastAttackTime = Time.time;
+                break;
+            }
+        }
     }
 
     void MoveAlongPath()
@@ -109,7 +131,7 @@ public class PathFinding : MonoBehaviour
                 return;
             }
 
-            foreach(Node neighbour in grid.GetNeighbours(currentNode))
+            foreach (Node neighbour in grid.GetNeighbours(currentNode))
             {
                 if (!neighbour.walkable || closedSet.Contains(neighbour))
                 {
@@ -163,3 +185,4 @@ public class PathFinding : MonoBehaviour
 
     }
 }
+

@@ -979,6 +979,7 @@ GameObject:
   - component: {fileID: 986416483}
   - component: {fileID: 986416482}
   - component: {fileID: 986416481}
+  - component: {fileID: 986416485}
   m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
@@ -1072,6 +1073,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &986416485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986416480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d996050d2c34369498d8800fa1c381ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 1118153710}
+  clickMask:
+    serializedVersion: 2
+    m_Bits: 64
+  grid: {fileID: 1741954947}
+  moveSpeed: 5
 --- !u!1 &1025504389
 GameObject:
   m_ObjectHideFlags: 0
@@ -1534,7 +1553,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1741954948}
   - component: {fileID: 1741954947}
-  - component: {fileID: 1741954949}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -1574,24 +1592,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1741954949
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1741954946}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d996050d2c34369498d8800fa1c381ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainCamera: {fileID: 1118153710}
-  seeker: {fileID: 986416484}
-  clickMask:
-    serializedVersion: 2
-    m_Bits: 64
-  moveSpeed: 5
 --- !u!1 &1800298092
 GameObject:
   m_ObjectHideFlags: 0
